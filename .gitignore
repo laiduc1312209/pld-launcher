@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+*.exe
+LauncherRelease/
+dist/
+build/
+
+# Virtual environment
+venv/
+.venv/
+
+# User data (NEVER upload)
+settings.json
+auth_session.json
+
+# Save zips (local temp files)
+*.zip
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Gemini
+.gemini/
