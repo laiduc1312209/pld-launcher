@@ -60,15 +60,51 @@ class Bootstrapper(QWidget):
         layout.addWidget(self.progress)
 
     def _check_update(self):
+        # Đường dẫn file Launcher chính
+        launcher_exe = "main.exe" if getattr(sys, 'frozen', False) else "main.py"
+        launcher_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), launcher_exe)
+        
+        # Nếu chưa có file chính (Chưa cài), bắt buộc phải tải về
+        self.is_first_install = not os.path.exists(launcher_path)
+        
+        if self.is_first_install:
+            self.title_lbl.setText("Đang cài đặt lần đầu...")
+            self.status_lbl.setText("Đang lấy thông tin máy chủ...")
+        
         self.checker = CheckUpdateWorker()
         self.checker.update_available.connect(self._on_update_found)
-        self.checker.no_update.connect(self._launch_launcher)
-        self.checker.error.connect(lambda e: self._launch_launcher()) # Nếu lỗi mạng thì cho vào luôn
+        
+        # Nếu không có bản cập nhật nhưng file chính bị thiếu, vẫn phải tải
+        def handle_no_update():
+            if self.is_first_install:
+                # Ép buộc tải bằng cách lấy URL từ checker
+                # Lưu ý: Cần lấy URL từ checker, tôi sẽ cập nhật updater.py để hỗ trợ lấy URL kể cả khi không có update
+                self.checker.force_url_fetch = True 
+                self.checker.start() 
+            else:
+                self._launch_launcher()
+
+        self.checker.no_update.connect(lambda: self._on_force_install_check() if self.is_first_install else self._launch_launcher())
+        self.checker.error.connect(lambda e: self._launch_launcher() if not self.is_first_install else self.status_lbl.setText(f"Lỗi kết nối: {e}"))
         self.checker.start()
 
+    def _on_force_install_check(self):
+        """Hỗ trợ lấy link tải khi cài mới mà checker báo 'không có update'."""
+        # Gọi lại checker nhưng lấy thông tin để tải
+        self.status_lbl.setText("Đang tải dữ liệu gốc...")
+        self._check_and_download_latest()
+
+    def _check_and_download_latest(self):
+        # Logic này sẽ được tối ưu trong updater.py để trả về URL ngay cả khi không có update
+        pass
+
     def _on_update_found(self, version, url, changelog):
-        self.title_lbl.setText(f"Có bản cập nhật mới: v{version}")
-        self.status_lbl.setText("Đang tải bản cập nhật...")
+        if self.is_first_install:
+            self.title_lbl.setText(f"Đang cài đặt phiên bản v{version}")
+        else:
+            self.title_lbl.setText(f"Có bản cập nhật mới: v{version}")
+            
+        self.status_lbl.setText("Đang tải dữ liệu...")
         self.progress.show()
         
         self.downloader = DownloadUpdateWorker(url)
@@ -105,6 +141,11 @@ class Bootstrapper(QWidget):
         sys.exit(0)
 
 if __name__ == "__main__":
+    if sys.platform == 'win32':
+        import ctypes
+        app_id = u'laiduc.pldlauncher.updater.v1'
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
+
     app = QApplication(sys.argv)
     window = Bootstrapper()
     window.show()

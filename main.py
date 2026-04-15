@@ -78,6 +78,12 @@ class UpdateRedirectDialog(QDialog):
 
 
 def main():
+    # --- Windows Taskbar Icon Fix ---
+    if sys.platform == 'win32':
+        import ctypes
+        app_id = u'laiduc.pldlauncher.main.v1' # Arbitrary unique string
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
+
     # --- Cleanup Old Executable ---
     if getattr(sys, 'frozen', False):
         old_exe = sys.executable + ".old"
