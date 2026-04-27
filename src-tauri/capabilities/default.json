@@ -1,0 +1,34 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "enables the default permissions",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "shell:allow-open",
+    "log:default",
+    "dialog:default",
+    "allow-login",
+    "allow-register",
+    "allow-get-library",
+    "allow-update-library",
+    "allow-play-game",
+    "allow-shell-open",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        { "cmd": "cmd", "args": ["/C", { "validator": "^.*$" }] }
+      ]
+    },
+    {
+      "identifier": "fs:allow-read",
+      "allow": [{ "path": "**" }]
+    },
+    {
+      "identifier": "fs:allow-write",
+      "allow": [{ "path": "**" }]
+    }
+  ]
+}

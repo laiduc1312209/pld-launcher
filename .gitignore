@@ -1,31 +1,24 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.egg-info/
-*.exe
-LauncherRelease/
-dist/
-build/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Virtual environment
-venv/
-.venv/
+node_modules
+dist
+dist-ssr
+*.local
 
-# User data (NEVER upload)
-settings.json
-auth_session.json
-
-# Save zips (local temp files)
-*.zip
-
-# IDE
-.vscode/
-.idea/
-
-# OS
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
-Thumbs.db
-
-# Gemini
-.gemini/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

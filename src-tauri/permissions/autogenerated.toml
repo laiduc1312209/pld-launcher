@@ -1,0 +1,30 @@
+# File định nghĩa quyền cho các hàm custom trong main.rs
+[[permission]]
+identifier = "allow-login"
+description = "Cho phép gọi hàm login"
+commands.allow = ["login"]
+
+[[permission]]
+identifier = "allow-register"
+description = "Cho phép gọi hàm register"
+commands.allow = ["register"]
+
+[[permission]]
+identifier = "allow-get-library"
+description = "Cho phép gọi hàm get_library"
+commands.allow = ["get_library"]
+
+[[permission]]
+identifier = "allow-update-library"
+description = "Cho phép gọi hàm update_library"
+commands.allow = ["update_library"]
+
+[[permission]]
+identifier = "allow-play-game"
+description = "Cho phép gọi hàm play_game"
+commands.allow = ["play_game"]
+
+[[permission]]
+identifier = "allow-shell-open"
+description = "Cho phép mở thư mục"
+commands.allow = ["shell_open"]
